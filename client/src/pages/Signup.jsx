@@ -1,7 +1,27 @@
 import { Button, Label, TextInput } from 'flowbite-react'
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 function Signup() {
+  const [formData , setFormData] = useState({})
+  const handleChange = (e)=>{
+      setFormData({...formData , [e.target.id]:e.target.value})
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/auth/signup' , {
+        method: 'POST',
+        headers: {'Content-type':'applicatio/json'},
+        body: JSON.stringify(formData),
+      })
+      const data = await res.json();
+    } catch (error) {
+      
+    }
+  }
+
+
   return (
     <div className='min-h-screen mt-20'>
       <div className='flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5'>
@@ -14,8 +34,8 @@ function Signup() {
               </span>
           </Link>
           <p className='text-sm mt-5 justify-items-stretch '>
-          <h2> Welcome to Master Blog!</h2><br/>
-          <h3>Create your account and join our vibrant community of writers and readers. Unlock the power to share your thoughts, insights, and stories with the world.</h3><br/>
+          <span>Welcome to Master Blog!</span> <br/>
+          <span>Create your account and join our vibrant community of writers and readers. Unlock the power to share your thoughts, insights, and stories with the world.</span><br/>
           Sign Up:<br/>
           [Username] - Choose a unique username that represents you.<br/>
           [Email] - Provide a valid email address to ensure seamless communication and account recovery.<br/>
@@ -27,18 +47,18 @@ function Signup() {
         {/* rightside */}
 
         <div className='flex-1 p-5'>
-            <form className='flex flex-col gap-4'>
+            <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
               <div>
                 <Label value='Your username'/>
-                <TextInput type='text' placeholder='Username' id='username'/>
+                <TextInput type='text' placeholder='Username' id='username' onChange={handleChange}/>
               </div>
               <div>
                 <Label value='Your Email'/>
-                <TextInput type='text' placeholder='name@company.com' id='email'/>
+                <TextInput type='email' placeholder='name@company.com' id='email' onChange={handleChange}/>
               </div>
               <div>
                 <Label value='Your Password'/>
-                <TextInput type='text' placeholder='Password' id='password'/>
+                <TextInput type='password ' placeholder='Password' id='password' onChange={handleChange}/>
               </div>
               <Button gradientDuoTone='purpleToPink' type='submit'>SignUp</Button>
             </form>
